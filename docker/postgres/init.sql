@@ -122,18 +122,17 @@ CREATE TABLE LOCALCARACTERISTIQUE
 
 CREATE TABLE LOGBOOK
 (
-    Date timestamp NOT NULL,
-    log_id VARCHAR(16) NOT NULL,
-    Heure TIME NOT NULL,
+    Log_id SERIAL NOT NULL,
     Description VARCHAR(1024) NOT NULL,
-    local_num VARCHAR(16) NOT NULL,
-    pav_id VARCHAR(16) NOT NULL,
-    cip VARCHAR(16) NOT NULL,
-    num_cubicule INT,
-    PRIMARY KEY (log_id),
-    FOREIGN KEY (cip) REFERENCES MEMBRE(Cip),
-    FOREIGN KEY (num_cubicule, Local_num, pav_id) REFERENCES CUBICULE(num_cubicule, local_num, pav_id),
-    FOREIGN KEY (local_num, pav_id) REFERENCES local(local_num, pav_id)
+    Date TIMESTAMP NOT NULL,
+    Local_num VARCHAR(32) NOT NULL,
+    pav_id VARCHAR(32) NOT NULL,
+    Cip VARCHAR(16) NOT NULL,
+    num_Cubicule INT,
+    PRIMARY KEY (Log_id),
+    FOREIGN KEY (Cip) REFERENCES MEMBRE(Cip),
+    FOREIGN KEY (num_Cubicule, Local_num, pav_id) REFERENCES CUBICULE(num_Cubicule, local_num, pav_id),
+    FOREIGN KEY (Local_num, pav_id) REFERENCES local(local_num, pav_id)
 );
 
 CREATE TABLE STATUT_Privileges

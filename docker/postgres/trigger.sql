@@ -18,8 +18,8 @@ END IF;
             RAISE EXCEPTION 'La durée de réservation doit être inférieure ou égale à 4 heures.';
 END IF;
 
-INSERT INTO logbook(log_id, description, date, local_num, num_cubicule, pav_id, cip)
-VALUES(DEFAULT, 'Reservation creee', CURRENT_DATE, new.local_num, new.num_cubicule, new.pav_id, new.cip);
+INSERT INTO logbook(log_id, date, description, local_num, pav_id, cip, num_cubicule)
+VALUES(DEFAULT, 'Reservation creee', CURRENT_TIMESTAMP, new.local_num, new.num_cubicule, new.pav_id, new.cip);
 RETURN NEW;
 ELSIF TG_OP = 'UPDATE' THEN
         IF EXISTS (
@@ -37,8 +37,8 @@ END IF;
             IF (NEW.heure_fin - NEW.heure_debut) > INTERVAL '4 hours' THEN
                 RAISE EXCEPTION 'La durée de réservation doit être inférieure ou égale à 4 heures.';
 END IF;
-INSERT INTO logbook(log_id, description, date, local_num, numcubicule, pav_id, cip)
-VALUES(DEFAULT, 'Reservation updatee', CURRENT_DATE, new.local_num, new.num_cubicule, new.pav_id, new.cip);
+INSERT INTO logbook(log_id, date, description, local_num, pav_id, cip, num_cubicule)
+VALUES(DEFAULT, 'Reservation updatee', CURRENT_TIMESTAMP, new.local_num, new.pav_id, new.cip, new.num_cubicule);
 --         UPDATE log
 --         SET description = 'Update de la reservation', date = CURRENT_DATE
 --         WHERE local_num = new.local_num AND pav_id = new.pav_id;
@@ -54,7 +54,7 @@ DROP TRIGGER IF EXISTS trigger_reservation_delete ON reservation;
 CREATE OR REPLACE FUNCTION procedure_reservation_delete()
     RETURNS TRIGGER AS $$
 BEGIN
-INSERT INTO log(log_id,description, date, local_num, pav_id, cip)
+INSERT INTO logbook(log_id, date, description, local_num, pav_id, cip, num_cubicule)
 VALUES(DEFAULT,'Reservation annule', CURRENT_TIMESTAMP, old.local_num, OLD.pav_id, old.cip);
 RETURN new;
 END;

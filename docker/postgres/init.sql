@@ -32,14 +32,6 @@ CREATE TABLE FONCTION
     PRIMARY KEY (Fonc_id)
 );
 
-CREATE TABLE LOGBOOK
-(
-    Date DATE NOT NULL,
-    Log_id VARCHAR(16) NOT NULL,
-    Heure TIME NOT NULL,
-    PRIMARY KEY (Log_id)
-);
-
 CREATE TABLE DEPARTEMENT
 (
     Dep_nom VARCHAR(128) NOT NULL,
@@ -69,6 +61,17 @@ CREATE TABLE MEMBRE
     PRIMARY KEY (Cip),
     FOREIGN KEY (Dep_id) REFERENCES DEPARTEMENT(Dep_id)
     --FOREIGN KEY (Log_id) REFERENCES LOGBOOK(Log_id)
+);
+
+CREATE TABLE LOGBOOK
+(
+    Date DATE NOT NULL,
+    Log_id VARCHAR(16) NOT NULL,
+    Heure TIME NOT NULL,
+    Local_num INT NOT NULL,
+    Pav_id VARCHAR(16) NOT NULL,
+    PRIMARY KEY (Log_id),
+    FOREIGN KEY (Local_num, Pav_id) REFERENCES LOCAL(Local_num, Pav_id) ON DELETE CASCADE
 );
 
 CREATE TABLE RESERVATION
@@ -143,6 +146,12 @@ CREATE TABLE STATUT_Privileges
     PRIMARY KEY (Privileges, Statut_id),
     FOREIGN KEY (Statut_id) REFERENCES STATUT(Statut_id)
 );
+
+ALTER TABLE LOGBOOK
+    ADD CONSTRAINT log_id_reservation_fkey
+        FOREIGN KEY (Local_num, Pav_id)
+            REFERENCES LOCAL (Local_num, Pav_id)
+            ON DELETE CASCADE;
 
 INSERT INTO CAMPUS VALUES (1, 'Campus Principal');
 INSERT INTO CAMPUS VALUES (2, 'Campus Medecine');

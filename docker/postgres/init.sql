@@ -32,14 +32,6 @@ CREATE TABLE FONCTION
     PRIMARY KEY (Fonc_id)
 );
 
-CREATE TABLE LOGBOOK
-(
-    Date DATE NOT NULL,
-    Log_id VARCHAR(16) NOT NULL,
-    Heure TIME NOT NULL,
-    PRIMARY KEY (Log_id)
-);
-
 CREATE TABLE DEPARTEMENT
 (
     Dep_nom VARCHAR(128) NOT NULL,
@@ -83,6 +75,7 @@ CREATE TABLE RESERVATION
     Cip VARCHAR(8) NOT NULL,
     Local_num VARCHAR(16) NOT NULL,
     Pav_id VARCHAR(16) NOT NULL,
+    num_cubicule INT,
     --Log_id VARCHAR(16) NOT NULL,
     PRIMARY KEY (Reserve_id),
     FOREIGN KEY (Cip) REFERENCES MEMBRE(Cip),
@@ -125,6 +118,22 @@ CREATE TABLE LOCALCARACTERISTIQUE
     PRIMARY KEY (Local_num, Pav_id, Carac_id),
     FOREIGN KEY (Local_num, Pav_id) REFERENCES LOCAL(Local_num, Pav_id),
     FOREIGN KEY (Carac_id) REFERENCES CARACTERISTIQUE(Carac_id)
+);
+
+CREATE TABLE LOGBOOK
+(
+    Date timestamp NOT NULL,
+    log_id VARCHAR(16) NOT NULL,
+    Heure TIME NOT NULL,
+    Description VARCHAR(1024) NOT NULL,
+    local_num VARCHAR(16) NOT NULL,
+    pav_id VARCHAR(16) NOT NULL,
+    cip VARCHAR(16) NOT NULL,
+    num_cubicule INT,
+    PRIMARY KEY (log_id),
+    FOREIGN KEY (cip) REFERENCES MEMBRE(Cip),
+    FOREIGN KEY (num_cubicule, Local_num, pav_id) REFERENCES CUBICULE(num_cubicule, local_num, pav_id),
+    FOREIGN KEY (local_num, pav_id) REFERENCES local(local_num, pav_id)
 );
 
 CREATE TABLE STATUT_Privileges

@@ -65,24 +65,6 @@ CREATE TABLE MEMBRE
     --FOREIGN KEY (Log_id) REFERENCES LOGBOOK(Log_id)
 );
 
-CREATE TABLE RESERVATION
-(
-    Heure_debut timestamp NOT NULL,
-    Heure_fin timestamp NOT NULL,
-    _Nb_places INT NOT NULL,
-    Reserve_id VARCHAR(16) NOT NULL,
-    Description VARCHAR(1024),
-    Cip VARCHAR(8) NOT NULL,
-    Local_num VARCHAR(16) NOT NULL,
-    Pav_id VARCHAR(16) NOT NULL,
-    num_cubicule INT,
-    --Log_id VARCHAR(16) NOT NULL,
-    PRIMARY KEY (Reserve_id),
-    FOREIGN KEY (Cip) REFERENCES MEMBRE(Cip),
-    FOREIGN KEY (Local_num, Pav_id) REFERENCES LOCAL(Local_num, Pav_id)
-    --FOREIGN KEY (Log_id) REFERENCES LOGBOOK(Log_id)
-);
-
 CREATE TABLE STATUT
 (
     Statut_id INT NOT NULL,
@@ -103,7 +85,7 @@ CREATE TABLE STATUTMEMBRE
 
 CREATE TABLE CUBICULE
 (
-    Num_cubicule INT NOT NULL,
+    Num_cubicule VARCHAR(16) NOT NULL,
     Local_num VARCHAR(16) NOT NULL,
     Pav_id VARCHAR(16) NOT NULL,
     PRIMARY KEY (Num_cubicule, Local_num, Pav_id),
@@ -120,6 +102,23 @@ CREATE TABLE LOCALCARACTERISTIQUE
     FOREIGN KEY (Carac_id) REFERENCES CARACTERISTIQUE(Carac_id)
 );
 
+CREATE TABLE RESERVATION
+(
+    Reserve_id VARCHAR(128) NOT NULL,
+    Heure_debut TIMESTAMP NOT NULL,
+    Heure_fin TIMESTAMP NOT NULL,
+    Local_num VARCHAR(32) NOT NULL,
+    Pav_id VARCHAR(32) NOT NULL,
+    Cip VARCHAR(16) NOT NULL,
+
+    Description VARCHAR(1024),
+    num_Cubicule VARCHAR(16),
+    PRIMARY KEY (Reserve_id),
+    FOREIGN KEY (num_Cubicule, Local_num, Pav_id) REFERENCES CUBICULE(num_Cubicule, Local_num, Pav_id),
+    FOREIGN KEY (Local_num, Pav_id) REFERENCES LOCAL(Local_num, Pav_id),
+    FOREIGN KEY (Cip) REFERENCES MEMBRE(Cip)
+);
+
 CREATE TABLE LOGBOOK
 (
     Log_id SERIAL NOT NULL,
@@ -128,7 +127,7 @@ CREATE TABLE LOGBOOK
     Local_num VARCHAR(32) NOT NULL,
     pav_id VARCHAR(32) NOT NULL,
     Cip VARCHAR(16) NOT NULL,
-    num_Cubicule INT,
+    num_Cubicule VARCHAR(16),
     PRIMARY KEY (Log_id),
     FOREIGN KEY (Cip) REFERENCES MEMBRE(Cip),
     FOREIGN KEY (num_Cubicule, Local_num, pav_id) REFERENCES CUBICULE(num_Cubicule, local_num, pav_id),
